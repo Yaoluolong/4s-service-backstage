@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">4S店客户服务管理后台</h3>
       </div>
 
       <el-form-item prop="username">
@@ -45,52 +45,40 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登入</el-button>
 
       <div style="position:relative">
         <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+          <span>账号 : admin</span>
+          <span>密码 : any</span>
         </div>
         <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
+          <span style="margin-right:18px;">账号 : editor</span>
+          <span>密码 : any</span>
         </div>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
       </div>
     </el-form>
 
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
 
 export default {
   name: 'Login',
-  components: { SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入正确的账号'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不能少于6个字符'))
       } else {
         callback()
       }
@@ -107,7 +95,6 @@ export default {
       passwordType: 'password',
       capsTooltip: false,
       loading: false,
-      showDialog: false,
       redirect: undefined,
       otherQuery: {}
     }
@@ -256,8 +243,8 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
+$bg:#30a8ef;
+$dark_gray:#fff;
 $light_gray:#eee;
 
 .login-container {
@@ -274,6 +261,12 @@ $light_gray:#eee;
     margin: 0 auto;
     overflow: hidden;
   }
+
+    .el-button--primary:hover{
+      background: #1385ef;
+      border-color: #1385ef;
+      color: #fff;
+    }
 
   .tips {
     font-size: 14px;
