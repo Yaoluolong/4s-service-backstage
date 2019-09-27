@@ -1,7 +1,8 @@
 <template>
-  <div class="dashboard-container">
-    预约管理
-  </div>
+  <el-container>
+    <el-header>预约管理</el-header>
+    <el-main>Main</el-main>
+  </el-container>
 </template>
 
 <script>

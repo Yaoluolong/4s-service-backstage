@@ -96,6 +96,21 @@ export const constantRoutes = [
         meta: { title: '简介', icon: 'user', noCache: true }
       }
     ]
+  },
+
+  // 测试页
+  {
+    path: '/test',
+    component: Layout,
+    redirect: '/test',
+    children: [
+      {
+        path: 'test',
+        component: () => import('@/views/test'),
+        name: 'Test',
+        meta: { title: '测试', icon: 'dashboard', affix: true }
+      }
+    ]
   }
   // {
   //   path: '/error',

@@ -46,7 +46,8 @@
       </el-tooltip>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登入</el-button>
-
+      <el-button @click="fetchData">test</el-button>
+      <div style="background:white">返回数据：{{ testData }}</div>
       <div style="position:relative">
         <div class="tips">
           <span>账号 : admin</span>
@@ -65,6 +66,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { fetchList } from '@/api/test'
 
 export default {
   name: 'Login',
@@ -84,6 +86,7 @@ export default {
       }
     }
     return {
+      testData: null,
       loginForm: {
         username: 'admin',
         password: '111111'
@@ -125,6 +128,16 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    fetchData() {
+      console.log()
+      fetchList()
+        .then(response => {
+          this.testData = response
+        })
+        .catch(() => {
+          this.testData = 'null'
+        })
+    },
     checkCapslock({ shiftKey, key } = {}) {
       if (key && key.length === 1) {
         if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
@@ -160,7 +173,7 @@ export default {
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
+          console.log('提交错误!!')
           return false
         }
       })
