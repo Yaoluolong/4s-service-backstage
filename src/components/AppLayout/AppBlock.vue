@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-block">
     <slot />
   </div>
 </template>
@@ -11,10 +11,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-container{
+.app-block{
   margin:10px 10px;
   padding:10px  10px;
-  background: white;
-  box-shadow: 2px 3px 3px #d3d3d3
 }
 </style>

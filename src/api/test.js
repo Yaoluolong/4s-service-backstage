@@ -8,6 +8,7 @@ export function fetchList() {
       username: 123,
       password: 123
     },
+    baseURL: 'http://windchaser.natapp1.cc',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   })
 }

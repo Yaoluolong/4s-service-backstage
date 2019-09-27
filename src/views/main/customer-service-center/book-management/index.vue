@@ -1,8 +1,8 @@
 <template>
-  <el-container>
-    <el-header>预约管理</el-header>
-    <el-main>Main</el-main>
-  </el-container>
+  <app-container>
+    <app-block>预约管理</app-block>
+    <app-block>content</app-block>
+  </app-container>
 </template>
 
 <script>
