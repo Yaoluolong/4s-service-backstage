@@ -1,31 +1,93 @@
 <template>
-  <div class="dashboard-container">
-    <component :is="currentRole" />
+  <div class="dashboard-editor-container">
+    <div class=" clearfix">
+      <pan-thumb :image="avatar" style="float: left">
+        你的职务:
+        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ displayName(item) }}</span>
+      </pan-thumb>
+      <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
+      <div class="info-container">
+        <span class="display_name">{{ name }}</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">首页</span>
+      </div>
+    </div>
+    <div>
+      <img :src="emptyGif" class="emptyGif">
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+import PanThumb from '@/components/PanThumb'
+import GithubCorner from '@/components/GithubCorner'
 
 export default {
-  name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
+  name: 'DashboardEditor',
+  components: { PanThumb, GithubCorner },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
     }
   },
   computed: {
     ...mapGetters([
+      'name',
+      'avatar',
       'roles'
     ])
   },
-  created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
+  methods: {
+    displayName(val) {
+      let value
+      switch (val) {
+        case 'admin':
+          value = '管理员'
+          break
+        case 'storekeeper':
+          value = '仓库管理员'
+          break
+        case 'salesman':
+          value = '业务员'
+          break
+        default:
+          break
+      }
+      return value
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .emptyGif {
+    display: block;
+    width: 45%;
+    margin: 0 auto;
+  }
+
+  .dashboard-editor-container {
+    background-color: #e3e3e3;
+    min-height: 100vh;
+    padding: 50px 60px 0px;
+    .pan-info-roles {
+      font-size: 12px;
+      font-weight: 500;
+      color: #333;
+      display: block;
+    }
+    .info-container {
+      position: relative;
+      margin-left: 190px;
+      height: 150px;
+      line-height: 200px;
+      .display_name {
+        font-size: 48px;
+        line-height: 48px;
+        color: #212121;
+        position: absolute;
+        top: 25px;
+      }
+    }
+  }
+</style>

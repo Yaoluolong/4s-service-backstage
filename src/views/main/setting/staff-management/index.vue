@@ -95,7 +95,14 @@
             label="姓名:"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="editForm.role" />
+            <el-select v-model="editForm.role" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -135,7 +142,14 @@
             :label-width="formLabelWidth"
             prop="role"
           >
-            <el-input v-model="addForm.role" />
+            <el-select v-model="addForm.role" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -185,6 +199,18 @@ export default {
       // 修改窗
       editFormVisible: false,
       editForm: {},
+
+      // 选择器
+      options: [{
+        value: 'admin',
+        label: '管理员'
+      }, {
+        value: 'storekeeper',
+        label: '仓库管理员'
+      }, {
+        value: 'salesman',
+        label: '业务员'
+      }],
 
       // 表格数据
       tableData: [],

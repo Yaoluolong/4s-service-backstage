@@ -125,8 +125,8 @@ yn<template>
       <el-dialog title="订单详情" :visible.sync="dialogFormVisible">
         <el-form>
           <el-form-item label="订单号:" :label-width="formLabelWidth">{{ dialogForm.id }}</el-form-item>
-          <el-form-item label="会员姓名:" :label-width="formLabelWidth">{{ dialogForm.userId }}</el-form-item>
-          <el-form-item label="会员号:" :label-width="formLabelWidth">{{ dialogForm.userName }}</el-form-item>
+          <el-form-item label="会员姓名:" :label-width="formLabelWidth">{{ dialogForm.userName }}</el-form-item>
+          <el-form-item label="会员号:" :label-width="formLabelWidth">{{ dialogForm.userId }}</el-form-item>
           <el-form-item label="联系方式:" :label-width="formLabelWidth">{{ dialogForm.phone }}</el-form-item>
           <el-form-item label="车型:" :label-width="formLabelWidth">{{ dialogForm.carModel }}</el-form-item>
           <el-form-item label="车牌号:" :label-width="formLabelWidth">{{ dialogForm.carPlate }}</el-form-item>

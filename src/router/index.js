@@ -201,7 +201,7 @@ export const asyncRoutes = [
     meta: {
       title: '服务中心',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'editor', 'storekeeper', 'salesman'] // you can set roles in root nav
     },
     children: [
       {
@@ -210,7 +210,7 @@ export const asyncRoutes = [
         name: 'OrderManagement',
         meta: {
           title: '订单管理',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['admin', 'salesman'] // or you can only set roles in sub nav
         }
       },
       {
@@ -219,7 +219,7 @@ export const asyncRoutes = [
         name: 'ReservationManagement',
         meta: {
           title: '预约受理',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['admin', 'salesman'] // or you can only set roles in sub nav
         }
       },
       {
@@ -228,7 +228,7 @@ export const asyncRoutes = [
         name: 'StockManagement',
         meta: {
           title: '备货管理',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['admin', 'storekeeper'] // or you can only set roles in sub nav
         }
       }
     ]
@@ -244,7 +244,7 @@ export const asyncRoutes = [
     meta: {
       title: '系统设置',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'editor', 'storekeeper'] // you can set roles in root nav
     },
     children: [
       {
@@ -271,7 +271,7 @@ export const asyncRoutes = [
         name: 'MaintenanceProjectManagement',
         meta: {
           title: '保养项目管理',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['admin', 'storekeeper'] // or you can only set roles in sub nav
         }
       }
     ]
