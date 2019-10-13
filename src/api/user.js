@@ -2,10 +2,20 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '/login',
     method: 'post',
-    data
+    params: {
+      ...data
+    },
+    // baseURL: 'http://carshop.natapp1.cc',
+    baseURL: 'http://windchaser.natapp1.cc',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   })
+  // return request({
+  //   url: '/user/login',
+  //   method: 'post',
+  //   data
+  // })
 }
 
 export function getInfo(token) {

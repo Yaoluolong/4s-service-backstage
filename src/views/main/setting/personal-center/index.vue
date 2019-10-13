@@ -1,7 +1,8 @@
 <template>
   <app-container>
-    <app-block>预约管理</app-block>
-    <app-block>content</app-block>
+    <app-block>
+      个人中心
+    </app-block>
   </app-container>
 </template>
 

@@ -191,65 +191,6 @@ export const asyncRoutes = [
   // nestedRouter,
   // tableRouter,
 
-  // 404 page must be placed at the end !!!
-
-  // 客服中心
-  {
-    path: '/customer-service-center',
-    component: Layout,
-    redirect: '/customer-service-center/book-management',
-    alwaysShow: true, // will always show the root menu
-    name: 'CustomerServiceCenter',
-    meta: {
-      title: '客户中心',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'book-management',
-        component: () => import('@/views/main/customer-service-center/book-management'),
-        name: 'BookManagement',
-        meta: {
-          title: '预约管理',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'maintenance-due-notice',
-        component: () => import('@/views/main/customer-service-center/maintenance-due-notice'),
-        name: 'MaintenanceDueNotice',
-        meta: {
-          title: '保养到期通知',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
-  // 业务中心
-  {
-    path: '/business-center',
-    component: Layout,
-    redirect: '/business-center',
-    alwaysShow: true, // will always show the root menu
-    name: 'BusinessCenter',
-    meta: {
-      title: '业务中心',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'order-management',
-        component: () => import('@/views/main/business-center/order-management'),
-        name: 'OrderManagement',
-        meta: {
-          title: '订单管理',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
   // 服务中心
   {
     path: '/service-center',
@@ -264,18 +205,27 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'maintenance-project-management',
-        component: () => import('@/views/main/service-center/maintenance-project-management'),
-        name: 'MaintenanceProjectManagement',
+        path: 'order-management',
+        component: () => import('@/views/main/service-center/order-management'),
+        name: 'OrderManagement',
         meta: {
-          title: '保养项目管理',
+          title: '订单管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'reservation-management',
+        component: () => import('@/views/main/service-center/reservation-management'),
+        name: 'ReservationManagement',
+        meta: {
+          title: '预约受理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
         path: 'stock-management',
         component: () => import('@/views/main/service-center/stock-management'),
-        name: 'stock-management',
+        name: 'StockManagement',
         meta: {
           title: '备货管理',
           roles: ['admin'] // or you can only set roles in sub nav
@@ -284,6 +234,49 @@ export const asyncRoutes = [
     ]
   },
 
+  // 系统设置
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: '/service-center',
+    alwaysShow: true, // will always show the root menu
+    name: 'Setting',
+    meta: {
+      title: '系统设置',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'personal-center',
+        component: () => import('@/views/main/setting/personal-center'),
+        name: 'PersonalCenter',
+        meta: {
+          title: '个人中心',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'staff-management',
+        component: () => import('@/views/main/setting/staff-management'),
+        name: 'StaffManagement',
+        meta: {
+          title: '员工管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'maintenance-project-management',
+        component: () => import('@/views/main/setting/maintenance-project-management'),
+        name: 'MaintenanceProjectManagement',
+        meta: {
+          title: '保养项目管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 

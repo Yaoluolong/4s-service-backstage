@@ -5,6 +5,9 @@ const tokens = {
   },
   editor: {
     token: 'editor-token'
+  },
+  storekeeper: {
+    token: '仓库管理员'
   }
 }
 
@@ -16,10 +19,16 @@ const users = {
     name: 'Super Admin'
   },
   'editor-token': {
-    roles: ['editor'],
+    roles: ['sam'],
     introduction: 'I am an editor',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Normal Editor'
+  },
+  '仓库管理员': {
+    roles: ['仓库管理员'],
+    introduction: '我是仓库管理员',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: '姚洛龙'
   }
 }
 
@@ -36,7 +45,7 @@ export default [
       if (!token) {
         return {
           code: 60204,
-          message: 'Account and password are incorrect.'
+          msg: 'Account and password are incorrect.'
         }
       }
 

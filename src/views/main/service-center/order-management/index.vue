@@ -2,11 +2,11 @@ yn<template>
   <app-container>
     <app-block>
       <el-form ref="form" :model="form" label-width="80px" :inline="true">
-        <el-form-item label="备货号" prop="id">
+        <el-form-item label="订单号" prop="id">
           <el-input v-model="form.id" />
         </el-form-item>
-        <el-form-item label="预约号" prop="appointed">
-          <el-input v-model="form.appointed" />
+        <el-form-item label="客户姓名" prop="userName">
+          <el-input v-model="form.userName" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="fetchTable">查询</el-button>
@@ -17,11 +17,10 @@ yn<template>
     <app-block>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="全部" name="all" />
-        <el-tab-pane label="未审核" name="未审核" />
-        <el-tab-pane label="待备货" name="待备货" />
-        <el-tab-pane label="已备货" name="已备货" />
-        <el-tab-pane label="已延迟" name="延迟备货" />
-        <el-tab-pane label="已取消" name="已取消" />
+        <el-tab-pane label="服务中" name="服务中" />
+        <el-tab-pane label="待支付" name="待支付" />
+        <el-tab-pane label="待评价" name="待评价" />
+        <el-tab-pane label="已评价" name="已评价" />
       </el-tabs>
       <el-table
         :data="tableData"
@@ -29,41 +28,63 @@ yn<template>
         align="center"
       >
         <el-table-column
-          label="备货号"
-          align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.stockUpId }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="预约号"
+          label="订单号"
           align="center"
           width="120"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.orderId }}</span>
+            <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="日期"
+          label="客户姓名"
+          align="center"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.userName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="联系方式"
+          align="center"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="车牌"
           align="center"
           width="120"
         >
           <template slot-scope="scope">
-            <i class="el-icon-time" />
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span>{{ scope.row.carPlate }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="涉及材料"
+          label="支付金额"
+          align="center"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.payAmount }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="项目"
           align="center"
           width="400"
         >
           <template slot-scope="scope">
             <span v-for="(item,index) in scope.row.projects" :key="index">
-              <span v-for="(item2,index2) in item.materialList" :key="index2">{{ item2.material }} </span>
+              <span
+                v-for="(item2,index2) in item.projects"
+                :key="index2"
+              >
+                {{ item2.projectName }}
+              </span>
             </span>
           </template>
         </el-table-column>
@@ -73,28 +94,16 @@ yn<template>
           width="100"
         >
           <template slot-scope="scope">
-            <span :style="{color:displayState(scope.row.stockUpState).color}">{{ displayState(scope.row.stockUpState).text }}</span>
+            <span :style="{color:displayState(scope.row.serviceState).color}">{{ displayState(scope.row.serviceState).text }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="240" fixed="right">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.stockUpState=='未审核'"
-              size="mini"
-              type="success"
-              @click="handleDeal(scope.row,'待备货')"
-            >通过</el-button>
-            <el-button
-              v-if="scope.row.stockUpState=='未审核'"
+              v-if="scope.row.serviceState=='服务中'"
               size="mini"
               type="danger"
-              @click="handleDeal(scope.row,'延迟备货')"
-            >退回</el-button>
-            <el-button
-              v-else-if="scope.row.stockUpState=='待备货'"
-              size="mini"
-              type="success"
-              @click="handleDeal(scope.row, '已备货')"
+              @click="handleDeal(scope.row, '待支付')"
             >完成</el-button>
             <el-button
               size="mini"
@@ -113,21 +122,27 @@ yn<template>
         @current-change="handleCurrentChange"
       />
 
-      <el-dialog title="备货详情" :visible.sync="dialogFormVisible">
+      <el-dialog title="订单详情" :visible.sync="dialogFormVisible">
         <el-form>
-          <el-form-item label="备货号:" :label-width="formLabelWidth">{{ dialogForm.stockUpId }}</el-form-item>
-          <el-form-item label="预约号:" :label-width="formLabelWidth">{{ dialogForm.orderId }}</el-form-item>
-          <el-form-item label="备货状态:" :label-width="formLabelWidth">{{ dialogForm.stockUpState }}</el-form-item>
-          <el-form-item label="审核人:" :label-width="formLabelWidth">{{ dialogForm.wareManagerId }}</el-form-item>
-          <el-form-item label="备货项目" :label-width="formLabelWidth">
+          <el-form-item label="订单号:" :label-width="formLabelWidth">{{ dialogForm.id }}</el-form-item>
+          <el-form-item label="会员姓名:" :label-width="formLabelWidth">{{ dialogForm.userId }}</el-form-item>
+          <el-form-item label="会员号:" :label-width="formLabelWidth">{{ dialogForm.userName }}</el-form-item>
+          <el-form-item label="联系方式:" :label-width="formLabelWidth">{{ dialogForm.phone }}</el-form-item>
+          <el-form-item label="车型:" :label-width="formLabelWidth">{{ dialogForm.carModel }}</el-form-item>
+          <el-form-item label="车牌号:" :label-width="formLabelWidth">{{ dialogForm.carPlate }}</el-form-item>
+          <el-form-item label="保养时长:" :label-width="formLabelWidth">{{ dialogForm.upKeepTime }}</el-form-item>
+          <el-form-item label="订单状态:" :label-width="formLabelWidth">{{ dialogForm.serviceState }}</el-form-item>
+          <el-form-item label="业务员:" :label-width="formLabelWidth">{{ dialogForm.employeeId }}</el-form-item>
+          <el-form-item label="订单项目" :label-width="formLabelWidth">
             <el-col v-for="(project,index) in dialogForm.projects" :key="index" :span="8" :offset="index > 0 ? 2 : 0">
               <el-card :body-style="{ padding: '0px' }">
                 <div slot="header" class="clearfix">
                   <span>{{ project.projectName }}</span>
                 </div>
-                <div v-for="(item,index2) in project.materialList" :key="index2" class="text item">
-                  {{ item.material }}
-                </div>
+                <el-form-item label="维修费:">{{ project.upKeepCost }}元</el-form-item>
+                <el-form-item label="总费用:">{{ project.totalCost }}元</el-form-item>
+                <el-form-item label="准备周期:">{{ project.prepareCycle }}天</el-form-item>
+                <el-form-item label="保养时长:">{{ project.duration }}小时</el-form-item>
               </el-card>
             </el-col>
           </el-form-item>
@@ -138,16 +153,16 @@ yn<template>
 </template>
 
 <script>
-import { query, deal } from '@/api/service-center/stock-management'
+import { query, deal } from '@/api/service-center/order-management'
 
 export default {
   data() {
     return {
       // 表单数据
       form: {
-        stockUpId: '',
-        orderId: '',
-        stockUpState: ''
+        id: '',
+        userName: '',
+        serviceState: ''
       },
 
       // 弹出框
@@ -169,6 +184,7 @@ export default {
   },
   created: function() {
     this.fetchTable()
+    console.log(this.tableData)
   },
   methods: {
     // 操作
@@ -183,9 +199,9 @@ export default {
     // tab切换
     handleClick(tab, event) {
       if (tab.name !== 'all') {
-        this.form.stockUpState = tab.name
+        this.form.serviceState = tab.name
       } else {
-        this.form.stockUpState = ''
+        this.form.serviceState = ''
       }
       this.fetchTable()
     },
@@ -201,20 +217,17 @@ export default {
     displayState(val) {
       let state
       switch (val) {
-        case '未审核':
-          state = { color: '#409EFF', text: '未审核' }
+        case '服务中':
+          state = { color: '#409EFF', text: '服务中' }
           break
-        case '延迟备货':
-          state = { color: '#F56C6C', text: '已延迟' }
+        case '待支付':
+          state = { color: '#F56C6C', text: '待支付' }
           break
-        case '待备货':
-          state = { color: '#E6A23C', text: '待备货' }
+        case '待评价':
+          state = { color: '#E6A23C', text: '待评价' }
           break
-        case '已备货':
-          state = { color: '#67C23A', text: '已备货' }
-          break
-        case '已取消':
-          state = { color: '#F56C6C', text: '已取消' }
+        case '已评价':
+          state = { color: '#67C23A', text: '已评价' }
           break
         default:
           break
@@ -233,7 +246,7 @@ export default {
         })
     },
     handleDeal(row, state) {
-      deal(row.stockUpId, row.orderId, state).then(response => {
+      deal(row.id, state).then(response => {
         alert('处理成功')
         this.fetchTable()
       })
