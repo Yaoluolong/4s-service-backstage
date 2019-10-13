@@ -45,7 +45,7 @@
           width="240"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.role }}</span>
+            <span>{{ displayState(scope.row.role) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="240">
@@ -276,6 +276,23 @@ export default {
         .catch(() => {
           alert('增加失败')
         })
+    },
+    displayState(val) {
+      let role
+      switch (val) {
+        case 'admin':
+          role = '管理员'
+          break
+        case 'storekeeper':
+          role = '仓库管理员'
+          break
+        case 'salesman':
+          role = '业务员'
+          break
+        default:
+          break
+      }
+      return role
     }
 
   }

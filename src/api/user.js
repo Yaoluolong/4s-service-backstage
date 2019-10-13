@@ -20,10 +20,17 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/employee/Token',
+    method: 'post',
+    params: { username: token },
+    baseURL: 'http://windchaser.natapp1.cc',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   })
+  // return request({
+  //   url: '/user/info',
+  //   method: 'get',
+  //   params: { token }
+  // })
 }
 
 export function logout() {

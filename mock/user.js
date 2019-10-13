@@ -1,20 +1,21 @@
 
 const tokens = {
   admin: {
-    token: 'admin-token'
+    // token: 'admin-token',
+    username: 'sam'
   },
   editor: {
     token: 'editor-token'
   },
   storekeeper: {
-    token: '仓库管理员'
+    token: 'storekeeper-token'
   }
 }
 
 const users = {
   'admin-token': {
     roles: ['admin'],
-    introduction: 'I am a super administrator',
+    introduction: '我是超级管理员',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Super Admin'
   },
@@ -24,9 +25,15 @@ const users = {
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Normal Editor'
   },
-  '仓库管理员': {
+  'storekeeper-token': {
     roles: ['仓库管理员'],
     introduction: '我是仓库管理员',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: '姚洛龙'
+  },
+  'sam': {
+    roles: ['我最牛逼'],
+    introduction: '我最牛逼',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '姚洛龙'
   }

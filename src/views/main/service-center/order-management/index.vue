@@ -79,12 +79,7 @@ yn<template>
         >
           <template slot-scope="scope">
             <span v-for="(item,index) in scope.row.projects" :key="index">
-              <span
-                v-for="(item2,index2) in item.projects"
-                :key="index2"
-              >
-                {{ item2.projectName }}
-              </span>
+              {{ item.projectName }}
             </span>
           </template>
         </el-table-column>

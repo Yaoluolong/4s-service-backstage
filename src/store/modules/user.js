@@ -1,9 +1,10 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getUserName, setUserName, removeUserName } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  username: getUserName(),
   name: '',
   avatar: '',
   introduction: '',
@@ -13,6 +14,9 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_USERNAME: (state, username) => {
+    state.username = username
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -34,10 +38,13 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        console.log(321)
         console.log(response)
         const { data } = response
         commit('SET_TOKEN', data.token)
+        commit('SET_USERNAME', data.username)
         setToken(data.token)
+        setUserName(data.username)
         resolve()
       }).catch(error => {
         reject(error)
@@ -47,9 +54,11 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    console.log(123)
     console.log(state)
+    console.log(commit)
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo(state.username).then(response => {
         const { data } = response
 
         if (!data) {
@@ -79,8 +88,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_USERNAME', '')
         commit('SET_ROLES', [])
         removeToken()
+        removeUserName()
         resetRouter()
         resolve()
       }).catch(error => {
@@ -93,8 +104,10 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_USERNAME', '')
       commit('SET_ROLES', [])
       removeToken()
+      removeUserName()
       resolve()
     })
   },
