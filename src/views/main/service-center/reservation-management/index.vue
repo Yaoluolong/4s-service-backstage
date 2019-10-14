@@ -210,7 +210,7 @@
         <el-form-item label="型号" :label-width="formLabelWidth">{{ dialogForm.carPlate }}</el-form-item>
         <el-form-item label="预计金额:" :label-width="formLabelWidth">{{ dialogForm.totalCost }}</el-form-item>
         <el-form-item label="预约状态:" :label-width="formLabelWidth">{{ dialogForm.orderState }}</el-form-item>
-        <el-form-item label="审核员工:" :label-width="formLabelWidth">{{ dialogForm.employeeId }}</el-form-item>
+        <!-- <el-form-item label="审核员工:" :label-width="formLabelWidth">{{ dialogForm.employeeId }}</el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button v-if="editState" @click="handleCancel">取消</el-button>

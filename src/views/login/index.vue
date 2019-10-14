@@ -46,17 +46,6 @@
       </el-tooltip>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登入</el-button>
-      <div style="position:relative">
-        <div class="tips">
-          <span>账号 : admin</span>
-          <span>密码 : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">账号 : editor</span>
-          <span>密码 : any</span>
-        </div>
-
-      </div>
     </el-form>
 
   </div>
@@ -127,7 +116,6 @@ export default {
   },
   methods: {
     fetchData() {
-      console.log()
       fetchList()
         .then(response => {
           this.testData = response

@@ -20,7 +20,7 @@ yn<template>
         <el-tab-pane label="服务中" name="服务中" />
         <el-tab-pane label="待支付" name="待支付" />
         <el-tab-pane label="待评价" name="待评价" />
-        <el-tab-pane label="已评价" name="已评价" />
+        <el-tab-pane label="已完成" name="已完成" />
       </el-tabs>
       <el-table
         :data="tableData"
@@ -134,10 +134,10 @@ yn<template>
                 <div slot="header" class="clearfix">
                   <span>{{ project.projectName }}</span>
                 </div>
-                <el-form-item label="维修费:">{{ project.upKeepCost }}元</el-form-item>
-                <el-form-item label="总费用:">{{ project.totalCost }}元</el-form-item>
-                <el-form-item label="准备周期:">{{ project.prepareCycle }}天</el-form-item>
-                <el-form-item label="保养时长:">{{ project.duration }}小时</el-form-item>
+                <el-form-item label="维修费:" :label-width="'80px'">{{ project.upKeepCost }}元</el-form-item>
+                <el-form-item label="总费用:" :label-width="'80px'">{{ project.totalCost }}元</el-form-item>
+                <el-form-item label="准备周期:" :label-width="'80px'">{{ project.prepareCycle }}天</el-form-item>
+                <el-form-item label="保养时长:" :label-width="'80px'">{{ project.duration }}小时</el-form-item>
               </el-card>
             </el-col>
           </el-form-item>
@@ -221,8 +221,8 @@ export default {
         case '待评价':
           state = { color: '#E6A23C', text: '待评价' }
           break
-        case '已评价':
-          state = { color: '#67C23A', text: '已评价' }
+        case '已完成':
+          state = { color: '#67C23A', text: '已完成' }
           break
         default:
           break

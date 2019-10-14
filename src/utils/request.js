@@ -44,7 +44,6 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(response)
     if (!response.code) {
       res.code = 20000
       // console.log(res.code)

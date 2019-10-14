@@ -27,6 +27,7 @@ export default {
   components: { PanThumb, GithubCorner },
   data() {
     return {
+      activeIndex: '1',
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
     }
   },
@@ -38,6 +39,9 @@ export default {
     ])
   },
   methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath)
+    },
     displayName(val) {
       let value
       switch (val) {

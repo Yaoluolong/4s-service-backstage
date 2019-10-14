@@ -40,7 +40,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="维修费"
+          label="服务费"
           align="center"
           width="180"
         >
@@ -89,7 +89,7 @@
         <el-form>
           <el-form-item label="项目号:" :label-width="formLabelWidth">{{ dialogForm.id }}</el-form-item>
           <el-form-item label="项目名称:" :label-width="formLabelWidth">{{ dialogForm.projectName }}</el-form-item>
-          <el-form-item label="维修费:" :label-width="formLabelWidth">{{ dialogForm.upKeepCost }}</el-form-item>
+          <el-form-item label="服务费:" :label-width="formLabelWidth">{{ dialogForm.upKeepCost }}</el-form-item>
           <el-form-item label="总费用:" :label-width="formLabelWidth">{{ dialogForm.totalCost }}</el-form-item>
           <el-form-item label="准备周期:" :label-width="formLabelWidth">{{ dialogForm.prepareCycle }} </el-form-item>
           <el-form-item label="保养时长:" :label-width="formLabelWidth">{{ dialogForm.duration }} </el-form-item>
@@ -132,7 +132,7 @@
             <el-input v-model="addForm.projectName" />
           </el-form-item>
           <el-form-item
-            label="维修费:"
+            label="服务费:"
             :label-width="formLabelWidth"
             prop="upKeepCost"
           >
@@ -176,7 +176,7 @@
             }"
           >
             <el-input v-model="item.name" placeholder="名称" />
-            <el-input v-model.number="item.cost" placeholder="费用" class="cost" />
+            <el-input v-model.number="item.cost" placeholder="费用" class="cost" />元
             <el-button @click.prevent="removeDomain(item)">删除</el-button>
           </el-form-item>
           <el-form-item>
@@ -214,7 +214,7 @@ export default {
       addFormVisible: false,
       rules: {
         projectName: [{ required: true, message: '项目名称不能为空' }],
-        upKeepCost: [{ required: true, message: '维修费不能为空' }, { type: 'number', message: '维修费必须为数字值' }],
+        upKeepCost: [{ required: true, message: '服务费不能为空' }, { type: 'number', message: '维修费必须为数字值' }],
         prepareCycle: [{ required: true, message: '准备周期不能为空' }, { type: 'number', message: '准备周期必须为数字值' }],
         description: [{ required: true, message: '描述不能为空' }],
         duration: [{ required: true, message: '保养时长不能为空' }, { type: 'number', message: '保养时长必须为数字值' }]
@@ -265,7 +265,6 @@ export default {
     handleDetail(index, row) {
       this.dialogFormVisible = true
       this.dialogForm = row
-      console.log(this.dialogForm)
     },
     handleEdit(index, row) {
       this.dialogFormVisible = false
@@ -328,12 +327,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           add(this.addForm, this.totalCost).then(response => {
-            if (this.addForm.materialList !== []) {
+            // console.log(this.addForm.materialList.length)
+            // if (this.addForm.materialList.length === 0) { alert('增加成功') }
+            if (this.addForm.materialList.length !== 0) {
               this.addForm.materialList.forEach(val => {
                 addM(response.data.projectId, val).then(r => {
                   if (this.addForm.materialList[this.addForm.materialList.length - 1] === val) {
-                    this.resetForm('addForm')
                     alert('增加成功')
+                    this.resetForm('addForm')
                     this.fetchTable()
                   }
                 })
@@ -342,7 +343,8 @@ export default {
                   })
               })
             } else {
-              alert('增加失败')
+              alert('增加成功')
+              this.resetForm('addForm')
             }
           })
             .catch(() => {

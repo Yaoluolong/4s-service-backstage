@@ -96,22 +96,22 @@ export const constantRoutes = [
         meta: { title: '简介', icon: 'user', noCache: true }
       }
     ]
-  },
+  }
 
   // 测试页
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test',
-    children: [
-      {
-        path: 'test',
-        component: () => import('@/views/test'),
-        name: 'Test',
-        meta: { title: '测试', icon: 'dashboard', affix: true }
-      }
-    ]
-  }
+  // {
+  //   path: '/test',
+  //   component: Layout,
+  //   redirect: '/test',
+  //   children: [
+  //     {
+  //       path: 'test',
+  //       component: () => import('@/views/test'),
+  //       name: 'Test',
+  //       meta: { title: '测试', icon: 'dashboard', affix: true }
+  //     }
+  //   ]
+  // }
   // {
   //   path: '/error',
   //   component: Layout,
@@ -200,7 +200,7 @@ export const asyncRoutes = [
     name: 'ServiceCenter',
     meta: {
       title: '服务中心',
-      icon: 'lock',
+      icon: 'component',
       roles: ['admin', 'editor', 'storekeeper', 'salesman'] // you can set roles in root nav
     },
     children: [
@@ -243,7 +243,7 @@ export const asyncRoutes = [
     name: 'Setting',
     meta: {
       title: '系统设置',
-      icon: 'lock',
+      icon: 'component',
       roles: ['admin', 'editor', 'storekeeper'] // you can set roles in root nav
     },
     children: [
