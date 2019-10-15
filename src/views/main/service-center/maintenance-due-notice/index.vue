@@ -1,256 +1,139 @@
-yn<template>
-  <app-container>
-    <app-block>
-      <el-form ref="form" :model="form" label-width="80px" :inline="true">
-        <el-form-item label="订单号" prop="id">
-          <el-input v-model="form.id" />
-        </el-form-item>
-        <el-form-item label="客户姓名" prop="appointed">
-          <el-input v-model="form.appointed" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="fetchTable">查询</el-button>
-          <el-button @click="resetForm('form')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </app-block>
-    <app-block>
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="all" />
-        <el-tab-pane label="未到期" name="未到期" />
-        <el-tab-pane label="已到期" name="已到期" />
-        <el-tab-pane label="已通知" name="已通知" />
-      </el-tabs>
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        align="center"
-      >
-        <el-table-column
-          label="订单号"
-          align="center"
-          width="180"
+<template>
+  <!--保养维护到期通知-->
+  <div style="margin: 35px">
+    <el-row :gutter="8">
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
+          <!--          <el-input v-model="inputData" placeholder="请输入条件" size="small" />-->
+        </div>
+      </el-col>
+      <el-col :span="11">
+        <!--        <div>-->
+        <!--          <el-button icon="el-icon-search" type="primary" size="small" @click="searchData">搜索</el-button>-->
+        <!--          <el-button icon="el-icon-delete" size="small">清空</el-button>-->
+        <!--        </div>-->
+      </el-col>
+    </el-row>
+    <el-row style="margin: 10px 0px" />
+    <div>
+      <div>
+        <el-table
+          v-loading="loading"
+          :data="tableDataBlack.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+          stripe
+          border
+          style="width: 100%"
+          max-height="450"
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.stockUpId }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="客户姓名"
-          align="center"
-          width="180"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.orderId }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="日期"
-          align="center"
-          width="180"
-        >
-          <template slot-scope="scope">
-            <i class="el-icon-time" />
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="项目"
-          align="center"
-          width="400"
-        >
-          <template slot-scope="scope">
-            <span v-for="(item,index) in scope.row.projects" :key="index">
-              <span v-for="(item2,index2) in item.materialList" :key="index2">{{ item2.material }} </span>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="状态"
-          align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <span :style="{color:displayState(scope.row.stockUpState).color}">{{ displayState(scope.row.stockUpState).text }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="240" fixed="right">
-          <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.stockUpState=='服务中'"
-              size="mini"
-              type="danger"
-              @click="handleDeal(scope.row, '待支付')"
-            >完成</el-button>
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleDetail(scope.$index, scope.row)"
-            >详情</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        :current-page="current"
-        :page-size="size"
-        layout="total, prev, pager, next, jumper"
-        :total="total"
-        align="center"
-        @current-change="handleCurrentChange"
-      />
-
-      <el-dialog title="备货详情" :visible.sync="dialogFormVisible">
-        <el-form>
-          <el-form-item label="备货号:" :label-width="formLabelWidth">{{ dialogForm.stockUpId }}</el-form-item>
-          <el-form-item label="预约号:" :label-width="formLabelWidth">{{ dialogForm.orderId }}</el-form-item>
-          <el-form-item label="备货状态:" :label-width="formLabelWidth">{{ dialogForm.stockUpState }}</el-form-item>
-          <el-form-item label="审核人:" :label-width="formLabelWidth">{{ dialogForm.wareManagerId }}</el-form-item>
-          <el-form-item label="备货项目" :label-width="formLabelWidth">
-            <el-col v-for="(project,index) in dialogForm.projects" :key="index" :span="8" :offset="index > 0 ? 2 : 0">
-              <el-card :body-style="{ padding: '0px' }">
-                <div slot="header" class="clearfix">
-                  <span>{{ project.projectName }}</span>
+          <el-table-column type="index" label="ID" width="50" align="center"><template slot-scope="scope">{{ scope.row.userId }}</template></el-table-column>
+          <el-table-column prop="custname" label="客户" align="center"><template slot-scope="scope">{{ scope.row.username }}</template></el-table-column>
+          <el-table-column prop="finalservice" label="最后一次服务时间" align="center"><template slot-scope="scope">{{ scope.row.lastUpkeepTime }}</template></el-table-column>
+          <el-table-column prop="custstate" label="通知状态" :formatter="formatPreState" align="center"><template slot-scope="scope">{{ scope.row.formState }}</template></el-table-column>
+          <el-table-column fixed="right" label="操作" align="center" width="300">
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" @click="handleClick(scope.row)">通知</el-button>
+              <el-dialog
+                title="是否通知该客户？"
+                :visible.sync="dialogVisible2"
+                center
+                :append-to-body="true"
+                :lock-scroll="false"
+                width="20%"
+              >
+                <div>
+                  <el-form>
+                    <el-form-item align="center">
+                      <el-row>
+                        <el-button type="primary" @click="updateState1">是</el-button>
+                        <el-button align="right" type="danger" @click="dialogVisible2=false">否</el-button>
+                      </el-row>
+                    </el-form-item>
+                  </el-form>
                 </div>
-                <div v-for="(item,index2) in project.materialList" :key="index2" class="text item">
-                  {{ item.material }}
-                </div>
-              </el-card>
-            </el-col>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
-    </app-block>
-  </app-container>
+              </el-dialog>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div align="right">
+          <el-pagination
+            :current-page.sync="currentPage"
+            :page-size="pageSize"
+            layout="total,prev, pager, next, jumper"
+            :total="tableDataBlack.length"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { query, deal } from '@/api/reservation-center/stock-management'
+import { selectByState, updateState } from '@/api/setting/maintenance-project-management'
 
 export default {
   data() {
     return {
-      // 表单数据
-      form: {
-        stockUpId: '',
-        orderId: '',
-        stockUpState: ''
-      },
-
-      // 弹出框
-      dialogFormVisible: false,
-      formLabelWidth: '150px',
-      dialogForm: {},
-
-      // 表格数据
-      tableData: [],
-
-      // page
-      total: 0,
-      current: 1,
-      size: 15,
-
-      // 当前tab
-      activeName: 'all'
+      tableDataBlack: [],
+      currentPage: 1,
+      pageSize: 5,
+      inputData: '',
+      dialogForm2: {},
+      dialogVisible2: false,
+      loading: true
     }
   },
-  created: function() {
-    this.fetchTable()
+  mounted() {
+    selectByState({
+    }).then(response => {
+      console.log(321)
+      console.log(response)
+      this.tableDataBlack = response
+      this.loading = false
+    })
   },
   methods: {
-    // 操作
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+      this.pageSize = val
     },
-    handleDetail(index, row) {
-      this.dialogFormVisible = true
-      this.dialogForm = row
-    },
-
-    // tab切换
-    handleClick(tab, event) {
-      if (tab.name !== 'all') {
-        this.form.stockUpState = tab.name
-      } else {
-        this.form.stockUpState = ''
-      }
-      this.fetchTable()
-    },
-
-    // 分页
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
-      this.current = val
-      this.fetchTable()
+      this.currentPage = val
     },
-
-    // 状态显示
-    displayState(val) {
-      let state
-      switch (val) {
-        case '服务中':
-          state = { color: '#409EFF', text: '服务中' }
-          break
-        case '待支付':
-          state = { color: '#F56C6C', text: '待支付' }
-          break
-        case '待评价':
-          state = { color: '#E6A23C', text: '待评价' }
-          break
-        case '已评价':
-          state = { color: '#67C23A', text: '已评价' }
-          break
-        default:
-          break
-      }
-      return state
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
     },
-
-    // 异步请求
-    fetchTable() {
-      query(this.form, this.current, this.size).then(response => {
-        this.tableData = response.records
-        this.total = response.total
-      })
-        .catch(() => {
-          this.tableData = []
+    searchData() {
+      console.log(this.chooseTenant + ':' + this.chooseStatus + ':' + this.inputData)
+    },
+    openDialog2: function(row) {
+      this.dialogForm2 = row
+      this.dialogVisible2 = true
+    },
+    updateState1() {
+      this.$message.success('通知成功！')
+      this.dialogVisible = false
+    },
+    formatPreState: function(row, column) {
+      return row.custstate === 1 ? '待提醒' : ''
+    },
+    handleClick(row) {
+      updateState(row.userId, '正常').then(response => {
+        alert('成功')
+        selectByState({
+        }).then(response => {
+          console.log(321)
+          console.log(response)
+          this.tableDataBlack = response
+          this.loading = false
         })
-    },
-    handleDeal(row, state) {
-      deal(row.stockUpId, row.orderId, state).then(response => {
-        alert('处理成功')
-        this.fetchTable()
       })
         .catch(() => {
-          alert('处理失败')
+          alert('失败')
         })
     }
-
   }
-
 }
 </script>
-
-<style scoped>
-
-.text {
-    font-size: 12px;
-  }
-
-  .item {
-    padding-left:8px;
-    line-height: 30px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-
-  .box-card {
-    width: 480px;
-  }
-</style>

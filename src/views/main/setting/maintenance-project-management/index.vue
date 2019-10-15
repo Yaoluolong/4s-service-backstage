@@ -327,8 +327,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           add(this.addForm, this.totalCost).then(response => {
-            // console.log(this.addForm.materialList.length)
-            // if (this.addForm.materialList.length === 0) { alert('增加成功') }
             if (this.addForm.materialList.length !== 0) {
               this.addForm.materialList.forEach(val => {
                 addM(response.data.projectId, val).then(r => {

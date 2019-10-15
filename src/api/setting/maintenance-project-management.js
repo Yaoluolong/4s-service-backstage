@@ -57,3 +57,37 @@ export function deleteProject(id) {
   })
 }
 
+export function selectByState() {
+  return request({
+    url: '/Crm/selectByState',
+    method: 'get',
+    baseURL: 'http://windchaser.natapp1.cc',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+
+export function updateState(userId, formState) {
+  return request({
+    url: '/Crm/updateState',
+    method: 'post',
+    params: {
+      userId,
+      formState
+    },
+    baseURL: 'http://windchaser.natapp1.cc',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+
+export function insert(form) {
+  return request({
+    url: '/Crm/insert',
+    method: 'post',
+    params: {
+      ...form
+    },
+    baseURL: 'http://windchaser.natapp1.cc',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+

@@ -214,11 +214,29 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'book-management',
+        component: () => import('@/views/main/service-center/book-management'),
+        name: 'BookManagement',
+        meta: {
+          title: '预约',
+          roles: ['admin', 'salesman'] // or you can only set roles in sub nav
+        }
+      },
+      {
         path: 'reservation-management',
         component: () => import('@/views/main/service-center/reservation-management'),
         name: 'ReservationManagement',
         meta: {
           title: '预约受理',
+          roles: ['admin', 'salesman'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'maintenance-due-notice',
+        component: () => import('@/views/main/service-center/maintenance-due-notice'),
+        name: 'MaintenanceDueNotice',
+        meta: {
+          title: '保养到期通知',
           roles: ['admin', 'salesman'] // or you can only set roles in sub nav
         }
       },
@@ -253,6 +271,15 @@ export const asyncRoutes = [
         name: 'PersonalCenter',
         meta: {
           title: '个人中心',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'information-management',
+        component: () => import('@/views/main/setting/information-management'),
+        name: 'InformationManagement',
+        meta: {
+          title: '客户信息',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },

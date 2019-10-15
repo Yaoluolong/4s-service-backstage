@@ -21,7 +21,7 @@ yn<template>
         <el-tab-pane label="待备货" name="待备货" />
         <el-tab-pane label="已备货" name="已备货" />
         <el-tab-pane label="已延迟" name="延迟备货" />
-        <el-tab-pane label="已取消" name="已取消" />
+        <!-- <el-tab-pane label="已取消" name="已取消" /> -->
       </el-tabs>
       <el-table
         :data="tableData"

@@ -2,7 +2,7 @@
 const tokens = {
   admin: {
     // token: 'admin-token',
-    username: 'sam'
+    username: 'admin-token'
   },
   editor: {
     token: 'editor-token'

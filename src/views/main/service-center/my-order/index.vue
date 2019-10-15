@@ -5,13 +5,9 @@
         <el-form-item label="订单号" prop="id">
           <el-input v-model="form.id" />
         </el-form-item>
-        <el-form-item label="客户姓名" prop="userName">
-          <el-input v-model="form.userName" />
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="fetchTable">查询</el-button>
           <el-button @click="resetForm('form')">重置</el-button>
-          <el-button type="success" @click="addFormVisible=true">增加</el-button>
         </el-form-item>
       </el-form>
     </app-block>
@@ -20,7 +16,7 @@
         <el-tab-pane label="全部" name="all" />
         <el-tab-pane label="服务中" name="服务中" />
         <el-tab-pane label="待支付" name="待支付" />
-        <!-- <el-tab-pane label="待评价" name="待评价" /> -->
+        <el-tab-pane label="待评价" name="待评价" />
         <el-tab-pane label="已完成" name="已完成" />
       </el-tabs>
       <el-table
@@ -35,15 +31,6 @@
         >
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="客户姓名"
-          align="center"
-          width="180"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.userName }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -102,12 +89,6 @@
               @click="handleDeal(scope.row, '待支付')"
             >完成</el-button>
             <el-button
-              v-if="scope.row.serviceState=='待支付'"
-              size="mini"
-              type="success"
-              @click="handleDeal(scope.row, '已完成')"
-            >支付</el-button>
-            <el-button
               size="mini"
               type="primary"
               @click="handleDetail(scope.$index, scope.row)"
@@ -123,89 +104,7 @@
         align="center"
         @current-change="handleCurrentChange"
       />
-      <el-dialog title="新增订单" :visible.sync="addFormVisible">
-        <el-form
-          ref="addForm"
-          :model="addForm"
-          label-width="80px"
-          size="mini"
-        >
-          <el-form-item
-            label="联系方式:"
-            :label-width="formLabelWidth"
-          >
-            <el-select v-model="valueU" filterable placeholder="请选择" @change="handleQuery">
-              <el-option
-                v-for="item in users"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item
-            label="会员号:"
-            :label-width="formLabelWidth"
-            prop="userId"
-          >
-            {{ addForm.userId }}
-          </el-form-item>
-          <el-form-item
-            label="会员姓名:"
-            :label-width="formLabelWidth"
-          >
-            {{ addForm.username }}
-          </el-form-item>
-          <el-form-item
-            label="车型:"
-            :label-width="formLabelWidth"
-          >
-            {{ addForm.carModel }}
-          </el-form-item>
-          <el-form-item
-            label="车牌:"
-            :label-width="formLabelWidth"
-          >
-            {{ addForm.carPlate }}
-          </el-form-item>
-          <el-form-item
-            label="项目:"
-            :label-width="formLabelWidth"
-          >
-            <el-select v-model="addForm.projects" filterable placeholder="请选择">
-              <el-option
-                v-for="v in options"
-                :key="v.value"
-                :label="v.label"
-                :value="v.value"
-              />
-            </el-select>
-          </el-form-item>
-          <!-- <el-form-item
-            v-for="(item, index) in addForm.projects"
-            :key="index"
-            :label="'项目' + index"
-            :label-width="formLabelWidth"
-          >
-            <el-select v-model="item.value" filterable placeholder="请选择">
-              <el-option
-                v-for="v in options"
-                :key="v.value"
-                :label="v.label"
-                :value="v.value"
-              />
-            </el-select>
-            <el-button @click.prevent="removeDomain(item)">删除</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="addDomain">新增项目</el-button>
-          </el-form-item> -->
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm('addForm')">重置</el-button>
-          <el-button type="primary" @click="handleAdd">增加</el-button>
-        </div>
-      </el-dialog>
+
       <el-dialog title="订单详情" :visible.sync="dialogFormVisible">
         <el-form>
           <el-form-item label="订单号:" :label-width="formLabelWidth">{{ dialogForm.id }}</el-form-item>
@@ -237,7 +136,7 @@
 </template>
 
 <script>
-import { query, deal, queryItem, queryCustomer, queryInfo, addItem } from '@/api/service-center/order-management'
+import { query, deal } from '@/api/service-center/order-management'
 
 export default {
   data() {
@@ -245,7 +144,6 @@ export default {
       // 表单数据
       form: {
         id: '',
-        userName: '',
         serviceState: ''
       },
 
@@ -254,28 +152,8 @@ export default {
       formLabelWidth: '150px',
       dialogForm: {},
 
-      // 新增框
-      addFormVisible: false,
-      addForm: {
-        userId: '',
-        username: '',
-        phone: '',
-        carModel: '',
-        carPlate: '',
-        projects: ''
-      },
-
       // 表格数据
       tableData: [],
-
-      // 选择器
-      options: [],
-      value: '',
-      users: [],
-      valueU: '',
-
-      // 项目列表
-      projects: [],
 
       // page
       total: 0,
@@ -288,6 +166,7 @@ export default {
   },
   created: function() {
     this.fetchTable()
+    console.log(this.tableData)
   },
   methods: {
     // 操作
@@ -309,21 +188,9 @@ export default {
       this.fetchTable()
     },
 
-    // 动态添加选项
-    removeDomain(item) {
-      var index = this.addForm.projects.indexOf(item)
-      if (index !== -1) {
-        this.addForm.projects.splice(index, 1)
-      }
-    },
-    addDomain() {
-      this.addForm.projects.push({
-        value: ''
-      })
-    },
-
     // 分页
     handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
       this.current = val
       this.fetchTable()
     },
@@ -359,58 +226,11 @@ export default {
         .catch(() => {
           this.tableData = []
         })
-      queryItem().then(response => {
-        this.options = []
-        this.projects = response.records
-        this.projects.forEach(val => {
-          this.options.push({ value: val.id, label: val.projectName })
-        })
-      })
-        .catch(() => {
-          this.projects = []
-        })
-      queryCustomer().then(response => {
-        console.log(response)
-        this.users = []
-        response.data.forEach(val => {
-          this.users.push({ value: val.phone, label: val.phone })
-        })
-      })
-        .catch(() => {
-          this.users = []
-        })
     },
     handleDeal(row, state) {
       deal(row.id, state).then(response => {
         alert('处理成功')
         this.fetchTable()
-      })
-        .catch(() => {
-          alert('处理失败')
-        })
-    },
-    handleQuery() {
-      queryInfo(this.valueU).then(response => {
-        this.addForm.phone = response.phone
-        this.addForm.userId = response.userId
-        this.addForm.username = response.username
-        this.addForm.carModel = response.carModel
-        this.addForm.carPlate = response.carPlate
-      })
-        .catch(() => {
-          alert('处理失败')
-        })
-    },
-    handleAdd() {
-      // const pro = []
-      // if (this.addForm.projects !== []) {
-      //   const arr = this.addForm.projects
-      //   arr.forEach(val => {
-      //     pro.push(val.value)
-      //   })
-      // }
-      addItem(this.addForm).then(response => {
-        alert('处理成功')
       })
         .catch(() => {
           alert('处理失败')
