@@ -104,6 +104,7 @@ export default {
       }, // 日期设置对象
       dialogForm2: {}, // 获取当前行的项目数据传到对话框
       dialogForm3: {
+        userId: '',
         username: '',
         phone: '',
         carModel: '',
@@ -155,6 +156,7 @@ export default {
       this.dialogForm3.phone = this.inputvalue2
       this.dialogForm3.carModel = this.inputvalue3
       this.dialogForm3.carPlate = this.inputvalue4
+      this.dialogForm3.userId = this.inputvalue5
       this.dialogForm3.upKeepTime = this.pickervalue
       this.dialogForm3.projectId = this.dialogForm2.id
       var test = this.dialogForm3
